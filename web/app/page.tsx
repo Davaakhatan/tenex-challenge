@@ -21,6 +21,22 @@ export default function HomePage() {
       .catch(() => setRecent([]));
   }, []);
 
+  async function onDeleteRecent(id: string) {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const ok = window.confirm("Delete this upload and its results?");
+    if (!ok) return;
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setRecent((prev) => prev.filter((u) => u.id !== id));
+    const last = localStorage.getItem("lastUploadId");
+    if (last === id) {
+      localStorage.removeItem("lastUploadId");
+    }
+  }
+
   return (
     <div className="grid">
       <div className="hero">
@@ -79,6 +95,7 @@ export default function HomePage() {
                   <th>Events</th>
                   <th>Anomalies</th>
                   <th>Uploaded</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -92,6 +109,11 @@ export default function HomePage() {
                     <td>{u.events_count}</td>
                     <td>{u.anomalies_count}</td>
                     <td>{new Date(u.created_at).toLocaleString()}</td>
+                    <td>
+                      <button className="pill" type="button" onClick={() => onDeleteRecent(u.id)}>
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

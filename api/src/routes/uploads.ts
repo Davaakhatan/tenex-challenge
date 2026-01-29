@@ -37,6 +37,14 @@ router.get("/", async (_req, res) => {
   return res.json({ uploads: result });
 });
 
+router.delete("/:uploadId", async (req, res) => {
+  const { uploadId } = req.params;
+  await withTransaction(async (client) => {
+    await client.query("DELETE FROM uploads WHERE id = $1", [uploadId]);
+  });
+  return res.json({ ok: true });
+});
+
 router.post("/", upload.single("file"), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).json({ error: "Missing file" });

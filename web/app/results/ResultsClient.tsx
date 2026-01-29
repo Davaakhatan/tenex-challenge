@@ -45,6 +45,22 @@ export default function ResultsClient() {
       .catch(() => setUploads([]));
   }, [uploadId]);
 
+  async function onDeleteUpload(id: string) {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const ok = window.confirm("Delete this upload and its results?");
+    if (!ok) return;
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setUploads((prev) => prev.filter((u) => u.id !== id));
+    if (lastUploadId === id) {
+      localStorage.removeItem("lastUploadId");
+      setLastUploadId(null);
+    }
+  }
+
   if (!ready) {
     return <div className="card">Checking authentication...</div>;
   }
@@ -70,6 +86,7 @@ export default function ResultsClient() {
                     <th>Events</th>
                     <th>Anomalies</th>
                     <th>Uploaded</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,6 +101,11 @@ export default function ResultsClient() {
                       <td>{u.events_count}</td>
                       <td>{u.anomalies_count}</td>
                       <td>{new Date(u.created_at).toLocaleString()}</td>
+                      <td>
+                        <button className="pill" type="button" onClick={() => onDeleteUpload(u.id)}>
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
