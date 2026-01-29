@@ -35,7 +35,7 @@ export default function ResultsPage() {
             {data.anomalies?.length ? (
               data.anomalies.map((a: any) => (
                 <div key={a.id} className="anomaly">
-                  <strong>{a.rule}</strong> - {a.explanation} (conf {a.confidence})
+                  <strong>{a.rule}</strong> - {a.explanation} (conf {Number(a.confidence).toFixed(2)})
                 </div>
               ))
             ) : (

@@ -37,4 +37,10 @@ Example:
 
 ## AI Usage
 Documented in `docs/strategy/ai-anomaly-detection.md`.
+
+## Anomaly Rules (Heuristic)
+- Burst requests from a single IP within 3 seconds.
+- High error ratio from a single IP.
+- Rare destination host within the file.
+- Large transfer size outliers.
 # tenex-challenge
