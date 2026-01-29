@@ -4,7 +4,7 @@ export default function HomePage() {
       <div className="hero card">
         <h2 className="card-title">Threat Review Console</h2>
         <p className="subtle">
-          Upload logs, extract timelines, and highlight suspicious patterns fast.
+          Upload logs, build timelines, and surface anomalies with confidence scores.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <a className="button" href="/login">Authenticate</a>
