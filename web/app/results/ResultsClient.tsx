@@ -113,6 +113,42 @@ export default function ResultsClient() {
                 </span>
               </div>
             )}
+            <div className="card">
+              <h3 className="card-title">SOC learnings</h3>
+              <div className="grid">
+                <p className="subtle">
+                  Total events: <strong>{data.events?.length ?? 0}</strong> with{" "}
+                  <strong>{data.anomalies?.length ?? 0}</strong> anomalies flagged.
+                </p>
+                {data.stats && (
+                  <>
+                    <p className="subtle">
+                      Top source IPs:{" "}
+                      <strong>
+                        {data.stats.topSrcIps.map((ip: any) => `${ip.ip} (${ip.count})`).join(", ")}
+                      </strong>
+                    </p>
+                    <p className="subtle">
+                      Top paths:{" "}
+                      <strong>
+                        {data.stats.topPaths.map((p: any) => `${p.path} (${p.count})`).join(", ")}
+                      </strong>
+                    </p>
+                    <p className="subtle">
+                      Error rate: <strong>{(data.stats.errorRate * 100).toFixed(1)}%</strong>
+                    </p>
+                  </>
+                )}
+                {data.timeline?.length ? (
+                  <p className="subtle">
+                    Timeline coverage:{" "}
+                    <strong>
+                      {data.timeline[0]?.window} → {data.timeline[data.timeline.length - 1]?.window}
+                    </strong>
+                  </p>
+                ) : null}
+              </div>
+            </div>
           </div>
         )}
       </div>
