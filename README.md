@@ -46,11 +46,11 @@ Example:
 - Allowed extensions: .log, .txt
 
 ## AI Usage
-Documented in `docs/strategy/ai-anomaly-detection.md`.
+This prototype uses rule-based heuristics (no external LLM). Anomalies are flagged by burst activity, high error ratio, rare destinations, and large transfer outliers. Each rule emits a confidence score based on severity (e.g., burst size or deviation from mean).
+Detailed notes in `docs/strategy/ai-anomaly-detection.md`.
 
 ## Anomaly Rules (Heuristic)
 - Burst requests from a single IP within 3 seconds.
 - High error ratio from a single IP.
 - Rare destination host within the file.
 - Large transfer size outliers.
-
