@@ -43,6 +43,38 @@ export default function ResultsPage() {
             )}
           </div>
           <div>
+            <h3>Events (sample)</h3>
+            {data.events?.length ? (
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Time</th>
+                    <th style={{ textAlign: "left" }}>Source</th>
+                    <th style={{ textAlign: "left" }}>Dest</th>
+                    <th style={{ textAlign: "left" }}>Path</th>
+                    <th style={{ textAlign: "left" }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.events.slice(0, 10).map((e: any) => {
+                    const flagged = data.anomalies?.some((a: any) => a.event_id === e.id);
+                    return (
+                      <tr key={e.id} className={flagged ? "anomaly" : undefined}>
+                        <td>{e.ts}</td>
+                        <td>{e.src_ip ?? e.srcIp}</td>
+                        <td>{e.dest_host ?? e.destHost}</td>
+                        <td>{e.path}</td>
+                        <td>{e.status}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <p>No events.</p>
+            )}
+          </div>
+          <div>
             <h3>Timeline</h3>
             {data.timeline?.length ? (
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -65,35 +97,6 @@ export default function ResultsPage() {
               </table>
             ) : (
               <p>No timeline data.</p>
-            )}
-          </div>
-          <div>
-            <h3>Events (sample)</h3>
-            {data.events?.length ? (
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr>
-                    <th style={{ textAlign: "left" }}>Time</th>
-                    <th style={{ textAlign: "left" }}>Source</th>
-                    <th style={{ textAlign: "left" }}>Dest</th>
-                    <th style={{ textAlign: "left" }}>Path</th>
-                    <th style={{ textAlign: "left" }}>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.events.slice(0, 10).map((e: any) => (
-                    <tr key={e.id}>
-                      <td>{e.ts}</td>
-                      <td>{e.src_ip ?? e.srcIp}</td>
-                      <td>{e.dest_host ?? e.destHost}</td>
-                      <td>{e.path}</td>
-                      <td>{e.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>No events.</p>
             )}
           </div>
         </div>
