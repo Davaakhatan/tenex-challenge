@@ -47,7 +47,7 @@ export default function UploadPage() {
   return (
     <div className="grid">
       <div className="card">
-        <h2 className="card-title">Upload Logs</h2>
+        <h2 className="card-title">Upload logs</h2>
         <p className="subtle">Accepted: .log or .txt, up to 5MB.</p>
         <form onSubmit={onSubmit} className="grid" style={{ marginTop: 12 }}>
           <input
@@ -59,7 +59,7 @@ export default function UploadPage() {
           <button className="button" type="submit" disabled={!file}>Analyze</button>
         </form>
         {error && (
-          <p className="badge" style={{ background: "var(--danger)", color: "#0f141b" }}>
+          <p className="badge" style={{ background: "#fee2e2", color: "#991b1b" }}>
             {error}
           </p>
         )}
@@ -78,7 +78,7 @@ export default function UploadPage() {
           </div>
           {result.upload?.id && (
             <p style={{ marginTop: 12 }}>
-              View full results: <a className="pill" href={`/results?uploadId=${result.upload.id}`}>Open</a>
+              <a className="pill" href={`/results?uploadId=${result.upload.id}`}>View full results</a>
             </p>
           )}
         </div>

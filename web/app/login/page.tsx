@@ -27,8 +27,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="card">
-      <h2 className="card-title">Login</h2>
+    <div className="card" style={{ maxWidth: 480 }}>
+      <h2 className="card-title">Sign in</h2>
       <p className="subtle">Use the demo credentials to continue.</p>
       <form onSubmit={onSubmit} className="grid" style={{ marginTop: 12 }}>
         <input
@@ -47,7 +47,7 @@ export default function LoginPage() {
         <button className="button" type="submit">Sign In</button>
       </form>
       {error && (
-        <p className="badge" style={{ background: "var(--danger)", color: "#0f141b" }}>
+        <p className="badge" style={{ background: "#fee2e2", color: "#991b1b" }}>
           {error}
         </p>
       )}

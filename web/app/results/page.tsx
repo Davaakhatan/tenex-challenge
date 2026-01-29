@@ -37,7 +37,7 @@ export default function ResultsPage() {
   return (
     <div className="grid">
       <div className="card">
-        <h2 className="card-title">Analysis Results</h2>
+        <h2 className="card-title">Analysis results</h2>
         {!uploadId && <p className="subtle">Upload a log file first.</p>}
         {uploadId && !data && <p className="subtle">Loading analysis...</p>}
         {data && (
@@ -109,7 +109,7 @@ export default function ResultsPage() {
 
       {data?.events?.length ? (
         <div className="card">
-          <h3 className="card-title">Event Sample</h3>
+          <h3 className="card-title">Event sample</h3>
           <table className="table">
             <thead>
               <tr>

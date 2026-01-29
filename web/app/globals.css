@@ -1,16 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap");
 
 :root {
-  --bg: #f6f7fb;
+  --bg: #f7f8fb;
   --panel: #ffffff;
-  --panel-2: #f0f4f8;
-  --line: #e1e6ef;
-  --text: #0f141b;
-  --muted: #5e6b7a;
-  --accent: #1fb6ff;
-  --accent-2: #2ce59b;
-  --danger: #d64545;
-  --shadow: 0 16px 40px rgba(16, 24, 40, 0.08);
+  --line: #e5e9f2;
+  --text: #101828;
+  --muted: #667085;
+  --accent: #2563eb;
+  --accent-2: #22c55e;
+  --danger: #dc2626;
+  --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
 }
 
 * {
@@ -25,12 +24,9 @@ body {
 }
 
 body {
-  font-family: "Sora", "Segoe UI", sans-serif;
+  font-family: "Inter", "Segoe UI", sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(1200px circle at 10% 10%, rgba(31, 182, 255, 0.08), transparent 60%),
-    radial-gradient(900px circle at 90% 0%, rgba(44, 229, 155, 0.08), transparent 55%),
-    linear-gradient(180deg, #f6f7fb 0%, #f3f6fb 100%);
+  background: var(--bg);
 }
 
 a {
@@ -39,30 +35,37 @@ a {
 }
 
 main {
-  max-width: 1200px;
-  margin: 28px auto 80px;
+  max-width: 1100px;
+  margin: 32px auto 80px;
   padding: 0 20px;
 }
 
 .topbar {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 20px;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 28px;
   flex-wrap: wrap;
 }
 
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .brand h1 {
-  margin: 6px 0 0;
-  font-size: 28px;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .brand .mono {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 12px;
   color: var(--muted);
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .subtle {
@@ -73,12 +76,13 @@ main {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .nav a,
 .nav button {
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid var(--line);
   background: var(--panel);
   font-size: 13px;
@@ -96,11 +100,12 @@ main {
 
 .hero {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   padding: 24px;
-  border-radius: 20px;
-  background: linear-gradient(120deg, rgba(31, 182, 255, 0.12), rgba(44, 229, 155, 0.12));
-  border: 1px solid rgba(31, 182, 255, 0.2);
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 
 .grid {
@@ -119,20 +124,20 @@ main {
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 20px;
   box-shadow: var(--shadow);
 }
 
 .card-title {
   margin: 0 0 8px;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .input {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: #fff;
   color: var(--text);
@@ -141,17 +146,22 @@ main {
 .input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(31, 182, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .button {
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #041018;
+  background: var(--accent);
+  color: #fff;
   font-weight: 600;
   cursor: pointer;
+}
+
+.button.secondary {
+  background: #eef2ff;
+  color: #1e3a8a;
 }
 
 .button:disabled {
@@ -165,7 +175,7 @@ main {
   gap: 6px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: var(--panel-2);
+  background: #f1f5f9;
   color: var(--muted);
   font-size: 12px;
   border: 1px solid var(--line);
@@ -174,7 +184,7 @@ main {
 .pill {
   padding: 8px 12px;
   border-radius: 999px;
-  background: #f2f7fb;
+  background: #f1f5f9;
   border: 1px solid var(--line);
   font-size: 13px;
 }
@@ -198,17 +208,8 @@ main {
 }
 
 .mono {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 12px;
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease both;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 900px) {

@@ -11,23 +11,18 @@ export default function HomePage() {
 
   return (
     <div className="grid">
-      <div className="hero card">
+      <div className="hero">
         <h2 className="card-title">Threat Review Console</h2>
         <p className="subtle">
           Upload logs, build timelines, and surface anomalies with confidence scores.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {authed ? (
-            <>
-              <a className="button" href="/upload">Upload Logs</a>
-              <a className="pill" href="/results">View Results</a>
-            </>
+            <a className="button" href="/upload">Upload Logs</a>
           ) : (
-            <>
-              <a className="button" href="/login">Authenticate</a>
-              <a className="pill" href="/upload">See Upload Flow</a>
-            </>
+            <a className="button" href="/login">Authenticate</a>
           )}
+          <a className="button secondary" href="/results">View Results</a>
         </div>
       </div>
 
@@ -48,19 +43,11 @@ export default function HomePage() {
             <span className="pill">Top paths</span>
           </div>
         </div>
-        {!authed && (
-          <div className="card">
-            <h3 className="card-title">Demo Access</h3>
-            <p className="mono">demo@tenex.local</p>
-            <p className="mono">password</p>
-          </div>
-        )}
-        {authed && (
-          <div className="card">
-            <h3 className="card-title">You are signed in</h3>
-            <p className="subtle">Proceed to upload logs and review results.</p>
-          </div>
-        )}
+        <div className="card">
+          <h3 className="card-title">Demo Access</h3>
+          <p className="mono">demo@tenex.local</p>
+          <p className="mono">password</p>
+        </div>
       </div>
 
       <div className="card">

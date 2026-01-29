@@ -30,7 +30,7 @@ export default function TopNav() {
       <div className="brand">
         <span className="mono">TENEX // LABS</span>
         <h1>Tenex Log Analyzer</h1>
-        <p className="subtle">SOC-ready timeline + anomaly review</p>
+        <span className="subtle">SOC-ready timeline + anomaly review</span>
       </div>
       <nav className="nav">
         {links.map((link) => (

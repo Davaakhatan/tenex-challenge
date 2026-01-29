@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <main>
           <TopNav />
-          <section className="fade-in">{children}</section>
+          {children}
         </main>
       </body>
     </html>
