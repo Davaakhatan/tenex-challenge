@@ -41,61 +41,46 @@ export default function UploadPage() {
   }
 
   if (!ready) {
-    return (
-      <div className="card fade-in">
-        <p>Checking authentication...</p>
-      </div>
-    );
+    return <div className="card">Checking authentication...</div>;
   }
 
   return (
-    <div className="card fade-in">
-      <h2>Upload Log</h2>
-      <p style={{ color: "var(--muted)" }}>Accepted: .log or .txt, up to 5MB.</p>
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, marginTop: 12 }}>
-        <input
-          className="input"
-          type="file"
-          accept=".log,.txt"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-        />
-        <button className="button" type="submit">Analyze</button>
-      </form>
-      {error && (
-        <p className="badge" style={{ background: "var(--danger)", color: "#0f141b" }}>
-          {error}
-        </p>
-      )}
+    <div className="grid">
+      <div className="card">
+        <h2 className="card-title">Upload Logs</h2>
+        <p className="subtle">Accepted: .log or .txt, up to 5MB.</p>
+        <form onSubmit={onSubmit} className="grid" style={{ marginTop: 12 }}>
+          <input
+            className="input"
+            type="file"
+            accept=".log,.txt"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+          <button className="button" type="submit" disabled={!file}>Analyze</button>
+        </form>
+        {error && (
+          <p className="badge" style={{ background: "var(--danger)", color: "#0f141b" }}>
+            {error}
+          </p>
+        )}
+      </div>
 
       {result && (
-        <div style={{ marginTop: 16 }}>
-          <h3>Summary</h3>
-          <p className="badge">Events: {result.events?.length ?? 0}</p>
-          <p className="badge">Anomalies: {result.anomalies?.length ?? 0}</p>
-          {result.timeline?.length ? (
-            <p className="badge">Timeline buckets: {result.timeline.length}</p>
-          ) : null}
-          {result.summary && (
-            <p className="badge">
-              Parsed {result.summary.parsedLines} / {result.summary.totalLines} lines
-            </p>
-          )}
-          {result.warnings?.length ? (
-            <div>
-              <p className="badge">Warnings: {result.warnings.join(", ")}</p>
-              {result.summary?.invalidSamples?.length ? (
-                <pre style={{ whiteSpace: "pre-wrap" }}>
-                  {result.summary.invalidSamples.join("\n")}
-                </pre>
-              ) : null}
-            </div>
-          ) : null}
+        <div className="card">
+          <h3 className="card-title">Snapshot</h3>
+          <div className="grid grid-2">
+            <span className="badge">Events: {result.events?.length ?? 0}</span>
+            <span className="badge">Anomalies: {result.anomalies?.length ?? 0}</span>
+            <span className="badge">
+              Parsed {result.summary?.parsedLines} / {result.summary?.totalLines} lines
+            </span>
+            <span className="badge">Timeline: {result.timeline?.length ?? 0} buckets</span>
+          </div>
           {result.upload?.id && (
-            <p>
-              View full results: <a href={`/results?uploadId=${result.upload.id}`}>Open</a>
+            <p style={{ marginTop: 12 }}>
+              View full results: <a className="pill" href={`/results?uploadId=${result.upload.id}`}>Open</a>
             </p>
           )}
-          <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(result.anomalies, null, 2)}</pre>
         </div>
       )}
     </div>
