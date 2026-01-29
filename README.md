@@ -7,8 +7,13 @@ Full-stack cybersecurity log analysis app. Users upload log files, the API parse
 1. Create a Postgres database.
 2. Apply schema: `psql $DATABASE_URL -f api/sql/schema.sql`
 3. Configure env vars for API and web.
-4. Start API and web.
-5. (Optional) Run parser test: `cd api && npm run test`
+4. Install deps: `cd api && npm install` and `cd web && npm install`
+5. Start API and web: `cd api && npm run dev` and `cd web && npm run dev`
+6. (Optional) Run parser test: `cd api && npm run test`
+
+## Local Setup (Docker)
+1. `docker compose up --build`
+2. Apply schema once: `psql postgresql://postgres:postgres@localhost:5432/tenex -f api/sql/schema.sql`
 
 ## Demo Credentials
 - Email: `demo@tenex.local`
@@ -48,4 +53,10 @@ Documented in `docs/strategy/ai-anomaly-detection.md`.
 - High error ratio from a single IP.
 - Rare destination host within the file.
 - Large transfer size outliers.
+
+## Video Walkthrough (Required)
+Record a short video explaining:
+- End-to-end flow (login → upload → parse → analyze → display)
+- Data model and why Postgres is used
+- How anomaly rules work + confidence scoring
 # tenex-challenge
