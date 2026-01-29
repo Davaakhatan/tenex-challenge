@@ -1,0 +1,4 @@
+{"timestamp":"2026-01-29T10:00:00Z","src_ip":"10.0.0.1","method":"GET","path":"/login","status":200,"bytes":512,"host":"app.local"}
+{"timestamp":"2026-01-29T10:00:01Z","src_ip":"10.0.0.1","method":"GET","path":"/admin","status":403,"bytes":128,"host":"app.local"}
+{"timestamp":"2026-01-29T10:00:02Z","src_ip":"10.0.0.2","method":"POST","path":"/login","status":401,"bytes":256,"host":"app.local"}
+{"timestamp":"2026-01-29T10:00:03Z","src_ip":"10.0.0.3","method":"GET","path":"/report","status":200,"bytes":4096,"host":"app.local"}

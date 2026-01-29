@@ -1,0 +1,4 @@
+ts=2026-01-29T10:00:00Z src=10.0.0.1 method=GET host=example.com path=/login status=200 bytes=512
+ts=2026-01-29T10:00:01Z src=10.0.0.1 method=GET host=example.com path=/admin status=403 bytes=128
+ts=2026-01-29T10:00:02Z src=10.0.0.2 method=POST host=example.com path=/login status=401 bytes=256
+ts=2026-01-29T10:00:03Z src=10.0.0.3 method=GET host=example.com path=/report status=200 bytes=4096

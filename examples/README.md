@@ -10,5 +10,9 @@ Use these to validate parsing and anomaly rules:
 
 Multi-format samples (raw formats supported by parser):
 - `apache_access.log` (Apache access log format)
+- `nginx_access.log` (Nginx access log format)
 - `squid_access.log` (Squid proxy access log format)
 - `zscaler_webproxy.csv` (Zscaler-like CSV format)
+- `app_json.log` (JSON lines app logs)
+- `syslog.log` (Syslog with key=value payload)
+- `app_kv.log` (Key=Value app logs)

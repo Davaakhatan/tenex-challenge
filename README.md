@@ -44,8 +44,12 @@ Example:
 ## Supported Formats
 - Custom format above
 - Apache access logs
+- Nginx access logs
 - Squid proxy access logs
 - Zscaler-like CSV logs
+- JSON app logs (one JSON per line)
+- Syslog with key=value payload
+- Key=value app logs
 
 ## Upload Limits
 - Max file size: 5MB
