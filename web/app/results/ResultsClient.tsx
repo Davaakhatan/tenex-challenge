@@ -118,42 +118,31 @@ export default function ResultsClient() {
         {uploadId && !data && <p className="subtle">Loading analysis...</p>}
         {data && (
           <div className="grid" style={{ marginTop: 12 }}>
-            <div className="card">
-              <h3 className="card-title">SOC learnings</h3>
-              <div className="grid">
-                <p className="subtle">
-                  Total events: <strong>{data.events?.length ?? 0}</strong> with{" "}
-                  <strong>{data.anomalies?.length ?? 0}</strong> anomalies flagged.
-                </p>
-                {data.stats && (
-                  <>
-                    <p className="subtle">
-                      Top source IPs:{" "}
-                      <strong>
-                        {data.stats.topSrcIps.map((ip: any) => `${ip.ip} (${ip.count})`).join(", ")}
-                      </strong>
-                    </p>
-                    <p className="subtle">
-                      Top paths:{" "}
-                      <strong>
-                        {data.stats.topPaths.map((p: any) => `${p.path} (${p.count})`).join(", ")}
-                      </strong>
-                    </p>
-                    <p className="subtle">
-                      Error rate: <strong>{(data.stats.errorRate * 100).toFixed(1)}%</strong>
-                    </p>
-                  </>
-                )}
-                {data.timeline?.length ? (
-                  <p className="subtle">
-                    Timeline coverage:{" "}
-                    <strong>
-                      {data.timeline[0]?.window} → {data.timeline[data.timeline.length - 1]?.window}
-                    </strong>
-                  </p>
-                ) : null}
-              </div>
+            <div className="grid grid-2">
+              <span className="badge">Events: {data.events?.length ?? 0}</span>
+              <span className="badge">Anomalies: {data.anomalies?.length ?? 0}</span>
+              {data.stats && (
+                <span className="badge">Error rate: {(data.stats.errorRate * 100).toFixed(1)}%</span>
+              )}
             </div>
+            {data.stats && (
+              <div className="grid grid-2">
+                <span className="pill">
+                  Top IPs: {data.stats.topSrcIps.map((ip: any) => `${ip.ip} (${ip.count})`).join(", ")}
+                </span>
+                <span className="pill">
+                  Top paths: {data.stats.topPaths.map((p: any) => `${p.path} (${p.count})`).join(", ")}
+                </span>
+              </div>
+            )}
+            {data.timeline?.length ? (
+              <p className="subtle">
+                Timeline summary: {data.timeline.length} buckets from{" "}
+                <strong>
+                  {data.timeline[0]?.window} → {data.timeline[data.timeline.length - 1]?.window}
+                </strong>
+              </p>
+            ) : null}
           </div>
         )}
       </div>
