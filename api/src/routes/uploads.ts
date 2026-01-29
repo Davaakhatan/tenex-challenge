@@ -17,6 +17,26 @@ const upload = multer({ dest: storageDir });
 const maxSizeBytes = 5 * 1024 * 1024;
 const allowedExt = new Set([".log", ".txt"]);
 
+router.get("/", async (_req, res) => {
+  const result = await withTransaction(async (client) => {
+    const uploads = await client.query(
+      `SELECT u.id, u.filename, u.status, u.created_at,
+              COALESCE(e.cnt, 0) AS events_count,
+              COALESCE(a.cnt, 0) AS anomalies_count
+       FROM uploads u
+       LEFT JOIN (SELECT upload_id, COUNT(*) cnt FROM events GROUP BY upload_id) e
+         ON e.upload_id = u.id
+       LEFT JOIN (SELECT upload_id, COUNT(*) cnt FROM anomalies GROUP BY upload_id) a
+         ON a.upload_id = u.id
+       ORDER BY u.created_at DESC
+       LIMIT 25`
+    );
+    return uploads.rows;
+  });
+
+  return res.json({ uploads: result });
+});
+
 router.post("/", upload.single("file"), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).json({ error: "Missing file" });

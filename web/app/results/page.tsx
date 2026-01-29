@@ -8,6 +8,7 @@ export default function ResultsPage() {
   const router = useRouter();
   const uploadId = searchParams.get("uploadId");
   const [data, setData] = useState<any>(null);
+  const [uploads, setUploads] = useState<any[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,17 @@ export default function ResultsPage() {
       .catch(() => setData(null));
   }, [uploadId]);
 
+  useEffect(() => {
+    if (uploadId) return;
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined
+    })
+      .then((res) => res.json())
+      .then((payload) => setUploads(payload.uploads ?? []))
+      .catch(() => setUploads([]));
+  }, [uploadId]);
+
   if (!ready) {
     return <div className="card">Checking authentication...</div>;
   }
@@ -38,7 +50,41 @@ export default function ResultsPage() {
     <div className="grid">
       <div className="card">
         <h2 className="card-title">Analysis results</h2>
-        {!uploadId && <p className="subtle">Upload a log file first.</p>}
+        {!uploadId && (
+          <>
+            <p className="subtle">Pick a previous upload to view results.</p>
+            {uploads.length ? (
+              <table className="table" style={{ marginTop: 12 }}>
+                <thead>
+                  <tr>
+                    <th>File</th>
+                    <th>Status</th>
+                    <th>Events</th>
+                    <th>Anomalies</th>
+                    <th>Uploaded</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {uploads.map((u) => (
+                    <tr key={u.id}>
+                      <td>
+                        <a className="pill" href={`/results?uploadId=${u.id}`}>
+                          {u.filename}
+                        </a>
+                      </td>
+                      <td>{u.status}</td>
+                      <td>{u.events_count}</td>
+                      <td>{u.anomalies_count}</td>
+                      <td>{new Date(u.created_at).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="subtle" style={{ marginTop: 12 }}>No uploads yet.</p>
+            )}
+          </>
+        )}
         {uploadId && !data && <p className="subtle">Loading analysis...</p>}
         {data && (
           <div className="grid" style={{ marginTop: 12 }}>

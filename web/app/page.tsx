@@ -4,9 +4,21 @@ import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const [authed, setAuthed] = useState(false);
+  const [recent, setRecent] = useState<any[]>([]);
 
   useEffect(() => {
     setAuthed(Boolean(localStorage.getItem("token")));
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then((res) => res.json())
+      .then((payload) => setRecent(payload.uploads ?? []))
+      .catch(() => setRecent([]));
   }, []);
 
   return (
@@ -55,6 +67,40 @@ export default function HomePage() {
         <p className="mono">2026-01-29T10:00:00Z 10.0.0.1 GET example.com /login 200 512</p>
         <p className="subtle">Accepted extensions: .log, .txt (max 5MB).</p>
       </div>
+
+      {authed && (
+        <div className="card">
+          <h3 className="card-title">Recent uploads</h3>
+          {recent.length ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Events</th>
+                  <th>Anomalies</th>
+                  <th>Uploaded</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recent.slice(0, 5).map((u) => (
+                  <tr key={u.id}>
+                    <td>
+                      <a className="pill" href={`/results?uploadId=${u.id}`}>
+                        {u.filename}
+                      </a>
+                    </td>
+                    <td>{u.events_count}</td>
+                    <td>{u.anomalies_count}</td>
+                    <td>{new Date(u.created_at).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="subtle">No uploads yet.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
