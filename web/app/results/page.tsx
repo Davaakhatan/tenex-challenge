@@ -20,7 +20,7 @@ export default function ResultsPage() {
   }, [uploadId]);
 
   return (
-    <div className="card">
+    <div className="card fade-in">
       <h2>Results</h2>
       {!uploadId && <p>Use the Upload page to analyze a log file.</p>}
       {uploadId && !data && <p>Loading results for {uploadId}...</p>}

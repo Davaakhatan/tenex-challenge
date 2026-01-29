@@ -11,11 +11,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <main>
-          <div style={{ marginBottom: 20 }}>
-            <h1>Tenex Log Analyzer</h1>
-            <p style={{ color: "var(--muted)" }}>
-              Prototype for SOC-style log analysis and anomaly detection
-            </p>
+          <div className="nav fade-in">
+            <div>
+              <div className="mono" style={{ color: "var(--muted)" }}>TENEX // LABS</div>
+              <h1 style={{ margin: "6px 0 0" }}>Tenex Log Analyzer</h1>
+              <p style={{ color: "var(--muted)", marginTop: 6 }}>
+                SOC-style log analysis, anomaly detection, and timeline insights
+              </p>
+            </div>
+            <div className="nav-links">
+              <a href="/">Overview</a>
+              <a href="/login">Login</a>
+              <a href="/upload">Upload</a>
+              <a href="/results">Results</a>
+            </div>
           </div>
           {children}
         </main>

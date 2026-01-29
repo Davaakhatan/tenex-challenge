@@ -24,9 +24,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="card">
+    <div className="card fade-in">
       <h2>Login</h2>
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
+      <p style={{ color: "var(--muted)" }}>Use the demo credentials to proceed.</p>
+      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, marginTop: 12 }}>
         <input
           className="input"
           value={email}

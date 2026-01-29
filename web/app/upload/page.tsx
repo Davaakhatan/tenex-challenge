@@ -29,9 +29,10 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="card">
+    <div className="card fade-in">
       <h2>Upload Log</h2>
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
+      <p style={{ color: "var(--muted)" }}>Accepted: .log or .txt, up to 5MB.</p>
+      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, marginTop: 12 }}>
         <input
           className="input"
           type="file"
