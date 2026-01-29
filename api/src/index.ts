@@ -9,7 +9,14 @@ import fs from "node:fs/promises";
 const app = express();
 const storageDir = process.env.STORAGE_DIR ?? "./storage";
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN ?? "*",
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
