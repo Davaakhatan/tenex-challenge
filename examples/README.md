@@ -16,3 +16,8 @@ Multi-format samples (raw formats supported by parser):
 - `app_json.log` (JSON lines app logs)
 - `syslog.log` (Syslog with key=value payload)
 - `app_kv.log` (Key=Value app logs)
+
+Large samples (~3–4MB each, under 5MB limit):
+- `big_custom.log`
+- `big_apache.log`
+- `big_json.log`
