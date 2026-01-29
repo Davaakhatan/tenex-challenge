@@ -1,7 +1,7 @@
 # Tenex Log Analyzer (Prototype)
 
 ## Overview
-Full-stack cybersecurity log analysis app. Users upload log files, the API parses them into events, runs anomaly detection, and the UI displays a table and timeline.
+Full-stack cybersecurity log analysis app. Users upload log files, the API parses them into events, runs anomaly detection, and the UI displays a table, timeline, and summary insights.
 
 ## Local Setup (Manual)
 1. Create a Postgres database.
@@ -45,9 +45,8 @@ Example:
 - Max file size: 5MB
 - Allowed extensions: .log, .txt
 
-## AI Usage
-This prototype uses rule-based heuristics (no external LLM). Anomalies are flagged by burst activity, high error ratio, rare destinations, and large transfer outliers. Each rule emits a confidence score based on severity (e.g., burst size or deviation from mean).
-Detailed notes in `docs/strategy/ai-anomaly-detection.md`.
+## AI / Anomaly Detection
+This prototype uses rule-based heuristics (no external LLM). Anomalies are flagged by burst activity, high error ratio, rare destinations, and large transfer outliers. Each rule emits a confidence score based on severity (e.g., burst size or deviation from mean). See `docs/strategy/ai-anomaly-detection.md`.
 
 ## Anomaly Rules (Heuristic)
 - Burst requests from a single IP within 3 seconds.
