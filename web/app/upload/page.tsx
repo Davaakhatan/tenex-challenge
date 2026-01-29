@@ -38,6 +38,9 @@ export default function UploadPage() {
     }
     const data = await res.json();
     setResult(data);
+    if (data?.upload?.id) {
+      localStorage.setItem("lastUploadId", data.upload.id);
+    }
   }
 
   if (!ready) {
