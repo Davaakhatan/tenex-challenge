@@ -17,6 +17,11 @@ Full-stack cybersecurity log analysis app. Users upload log files, the API parse
 ## Auth
 Login returns a JWT; send it as `Authorization: Bearer <token>` for uploads and analysis.
 
+## API
+- `POST /uploads` -> returns events, anomalies, timeline, summary
+- `GET /analysis/:uploadId` -> full analysis
+- `GET /analysis/:uploadId/summary` -> summary only
+
 ## Env
 - API: `DATABASE_URL`, `JWT_SECRET`, `STORAGE_DIR`
 - Web: `NEXT_PUBLIC_API_URL`

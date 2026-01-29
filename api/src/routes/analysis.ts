@@ -40,4 +40,24 @@ router.get("/:uploadId", async (req, res) => {
   });
 });
 
+router.get("/:uploadId/summary", async (req, res) => {
+  const { uploadId } = req.params;
+  const events = await query(
+    "SELECT ts, src_ip, dest_host, method, path, status, bytes, raw FROM events WHERE upload_id = $1",
+    [uploadId]
+  );
+  const normalizedEvents = events.rows.map((row: any) => ({
+    ts: row.ts,
+    srcIp: row.src_ip,
+    destHost: row.dest_host,
+    method: row.method,
+    path: row.path,
+    status: row.status,
+    bytes: row.bytes,
+    raw: row.raw
+  }));
+  const stats = buildSummary(normalizedEvents);
+  return res.json({ uploadId, stats });
+});
+
 export default router;
