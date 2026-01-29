@@ -1,12 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const uploadId = searchParams.get("uploadId");
   const [data, setData] = useState<any>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    setReady(true);
+  }, [router]);
 
   useEffect(() => {
     if (!uploadId) return;
@@ -18,6 +29,14 @@ export default function ResultsPage() {
       .then(setData)
       .catch(() => setData(null));
   }, [uploadId]);
+
+  if (!ready) {
+    return (
+      <div className="card fade-in">
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="card fade-in">
