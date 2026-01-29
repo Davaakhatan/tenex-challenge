@@ -1,0 +1,103 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+export default function ResultsPage() {
+  const searchParams = useSearchParams();
+  const uploadId = searchParams.get("uploadId");
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!uploadId) return;
+    const token = localStorage.getItem("token");
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/analysis/${uploadId}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined
+    })
+      .then((res) => res.json())
+      .then(setData)
+      .catch(() => setData(null));
+  }, [uploadId]);
+
+  return (
+    <div className="card">
+      <h2>Results</h2>
+      {!uploadId && <p>Use the Upload page to analyze a log file.</p>}
+      {uploadId && !data && <p>Loading results for {uploadId}...</p>}
+      {data && (
+        <div style={{ display: "grid", gap: 12 }}>
+          <div>
+            <span className="badge">Events: {data.events?.length ?? 0}</span>{" "}
+            <span className="badge">Anomalies: {data.anomalies?.length ?? 0}</span>
+          </div>
+          <div>
+            <h3>Anomalies</h3>
+            {data.anomalies?.length ? (
+              data.anomalies.map((a: any) => (
+                <div key={a.id} className="anomaly">
+                  <strong>{a.rule}</strong> - {a.explanation} (conf {a.confidence})
+                </div>
+              ))
+            ) : (
+              <p>No anomalies detected.</p>
+            )}
+          </div>
+          <div>
+            <h3>Timeline</h3>
+            {data.timeline?.length ? (
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Window</th>
+                    <th style={{ textAlign: "left" }}>Events</th>
+                    <th style={{ textAlign: "left" }}>Top Source IP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.timeline.map((t: any) => (
+                    <tr key={t.window}>
+                      <td>{t.window}</td>
+                      <td>{t.count}</td>
+                      <td>{t.topSrcIp}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No timeline data.</p>
+            )}
+          </div>
+          <div>
+            <h3>Events (sample)</h3>
+            {data.events?.length ? (
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Time</th>
+                    <th style={{ textAlign: "left" }}>Source</th>
+                    <th style={{ textAlign: "left" }}>Dest</th>
+                    <th style={{ textAlign: "left" }}>Path</th>
+                    <th style={{ textAlign: "left" }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.events.slice(0, 10).map((e: any) => (
+                    <tr key={e.id}>
+                      <td>{e.ts}</td>
+                      <td>{e.src_ip ?? e.srcIp}</td>
+                      <td>{e.dest_host ?? e.destHost}</td>
+                      <td>{e.path}</td>
+                      <td>{e.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No events.</p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

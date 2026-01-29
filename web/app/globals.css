@@ -1,0 +1,70 @@
+:root {
+  --bg: #0f141b;
+  --panel: #1a2230;
+  --text: #e7edf5;
+  --muted: #8ea0b6;
+  --accent: #5bd0ff;
+  --danger: #ff7b72;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  background: radial-gradient(800px circle at 10% 10%, #1f2a3a 0%, #0f141b 60%);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+main {
+  max-width: 960px;
+  margin: 48px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid #253248;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2b3a52;
+  background: #0f141b;
+  color: var(--text);
+}
+
+.button {
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #001019;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #24344b;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.anomaly {
+  border-left: 3px solid var(--danger);
+  padding-left: 12px;
+}
