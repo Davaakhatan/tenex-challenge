@@ -18,11 +18,16 @@ export default function HomePage() {
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {authed ? (
-            <a className="button" href="/upload">Go to Upload</a>
+            <>
+              <a className="button" href="/upload">Upload Logs</a>
+              <a className="pill" href="/results">View Results</a>
+            </>
           ) : (
-            <a className="button" href="/login">Authenticate</a>
+            <>
+              <a className="button" href="/login">Authenticate</a>
+              <a className="pill" href="/upload">See Upload Flow</a>
+            </>
           )}
-          <a className="button" href="/upload">Upload Logs</a>
         </div>
       </div>
 
