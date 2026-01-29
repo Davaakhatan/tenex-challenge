@@ -1,4 +1,14 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 export default function HomePage() {
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    setAuthed(Boolean(localStorage.getItem("token")));
+  }, []);
+
   return (
     <div className="grid">
       <div className="hero card">
@@ -7,7 +17,11 @@ export default function HomePage() {
           Upload logs, build timelines, and surface anomalies with confidence scores.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <a className="button" href="/login">Authenticate</a>
+          {authed ? (
+            <a className="button" href="/upload">Go to Upload</a>
+          ) : (
+            <a className="button" href="/login">Authenticate</a>
+          )}
           <a className="button" href="/upload">Upload Logs</a>
         </div>
       </div>
@@ -29,11 +43,19 @@ export default function HomePage() {
             <span className="pill">Top paths</span>
           </div>
         </div>
-        <div className="card">
-          <h3 className="card-title">Demo Access</h3>
-          <p className="mono">demo@tenex.local</p>
-          <p className="mono">password</p>
-        </div>
+        {!authed && (
+          <div className="card">
+            <h3 className="card-title">Demo Access</h3>
+            <p className="mono">demo@tenex.local</p>
+            <p className="mono">password</p>
+          </div>
+        )}
+        {authed && (
+          <div className="card">
+            <h3 className="card-title">You are signed in</h3>
+            <p className="subtle">Proceed to upload logs and review results.</p>
+          </div>
+        )}
       </div>
 
       <div className="card">
