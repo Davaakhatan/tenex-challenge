@@ -54,9 +54,3 @@ Documented in `docs/strategy/ai-anomaly-detection.md`.
 - Rare destination host within the file.
 - Large transfer size outliers.
 
-## Video Walkthrough (Required)
-Record a short video explaining:
-- End-to-end flow (login → upload → parse → analyze → display)
-- Data model and why Postgres is used
-- How anomaly rules work + confidence scoring
-# tenex-challenge
