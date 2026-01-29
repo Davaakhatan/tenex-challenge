@@ -8,6 +8,7 @@ Full-stack cybersecurity log analysis app. Users upload log files, the API parse
 2. Apply schema: `psql $DATABASE_URL -f api/sql/schema.sql`
 3. Configure env vars for API and web.
 4. Start API and web.
+5. (Optional) Run parser test: `cd api && npm run test`
 
 ## Demo Credentials
 - Email: `demo@tenex.local`
