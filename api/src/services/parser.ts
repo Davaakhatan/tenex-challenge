@@ -189,21 +189,37 @@ function parseZscalerCsv(line: string): LogEvent | null {
 }
 
 function parseJsonLine(line: string): LogEvent | null {
-  if (!line.trim().startsWith("{")) return null;
+  const trimmed = line.trim();
+  if (!trimmed.startsWith("{")) return null;
+  const first = trimmed.indexOf("{");
+  const last = trimmed.lastIndexOf("}");
+  if (first === -1 || last === -1 || last <= first) return null;
+  const jsonSlice = trimmed.slice(first, last + 1);
   let obj: any;
   try {
-    obj = JSON.parse(line);
+    obj = JSON.parse(jsonSlice);
   } catch {
     return null;
   }
 
-  const ts = obj.timestamp || obj.time || obj.ts || obj.datetime;
-  const srcIp = obj.src_ip || obj.ip || obj.client_ip || obj.remote_ip;
-  const method = obj.method || obj.http_method || "GET";
-  const path = obj.path || obj.uri || obj.url_path;
-  const status = Number(obj.status || obj.status_code);
-  const bytes = Number(obj.bytes || obj.size || obj.response_bytes || 0);
-  const destHost = obj.dest_host || obj.host || obj.hostname || "app.local";
+  const ts =
+    obj.timestamp ||
+    obj.time ||
+    obj.ts ||
+    obj.datetime ||
+    obj.LogTimestamp ||
+    obj.TimestampRequestReceiveStart;
+  const srcIp =
+    obj.src_ip ||
+    obj.ip ||
+    obj.client_ip ||
+    obj.remote_ip ||
+    obj.ClientPublicIp;
+  const method = obj.method || obj.http_method || obj.Method || "GET";
+  const path = obj.path || obj.uri || obj.url_path || obj.URL || "/";
+  const status = Number(obj.status || obj.status_code || obj.StatusCode);
+  const bytes = Number(obj.bytes || obj.size || obj.response_bytes || obj.ResponseSize || 0);
+  const destHost = obj.dest_host || obj.host || obj.hostname || obj.Host || "app.local";
 
   if (!ts || !srcIp || !path) return null;
   if (Number.isNaN(Date.parse(ts))) return null;

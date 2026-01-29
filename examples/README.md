@@ -13,6 +13,7 @@ Multi-format samples (raw formats supported by parser):
 - `nginx_access.log` (Nginx access log format)
 - `squid_access.log` (Squid proxy access log format)
 - `zscaler_webproxy.csv` (Zscaler-like CSV format)
+- `zscaler_browser_access.json` (Zscaler browser access JSON)
 - `app_json.log` (JSON lines app logs)
 - `syslog.log` (Syslog with key=value payload)
 - `app_kv.log` (Key=Value app logs)

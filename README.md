@@ -47,6 +47,7 @@ Example:
 - Nginx access logs
 - Squid proxy access logs
 - Zscaler-like CSV logs
+- Zscaler browser access JSON logs
 - JSON app logs (one JSON per line)
 - Syslog with key=value payload
 - Key=value app logs
