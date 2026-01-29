@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "tsx src/index.ts",
     "test": "node --loader ts-node/esm src/services/parser.test.ts"
   },
   "dependencies": {

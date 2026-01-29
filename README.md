@@ -28,7 +28,7 @@ Login returns a JWT; send it as `Authorization: Bearer <token>` for uploads and 
 - `GET /analysis/:uploadId/summary` -> summary only
 
 ## Env
-- API: `DATABASE_URL`, `JWT_SECRET`, `STORAGE_DIR`
+- API: `DATABASE_URL`, `JWT_SECRET`, `STORAGE_DIR`, `CORS_ORIGIN`
 - Web: `NEXT_PUBLIC_API_URL`
 
 ## Example Logs
@@ -47,6 +47,34 @@ Example:
 
 ## AI / Anomaly Detection
 This prototype uses rule-based heuristics (no external LLM). Anomalies are flagged by burst activity, high error ratio, rare destinations, and large transfer outliers. Each rule emits a confidence score based on severity (e.g., burst size or deviation from mean). See `docs/strategy/ai-anomaly-detection.md`.
+
+## Deployment (Vercel + Render + Neon)
+
+### 1) Neon (Postgres)
+1. Create a Neon project and database.
+2. Copy the connection string (DATABASE_URL).
+3. Run the schema once locally against Neon:
+   `psql $DATABASE_URL -f api/sql/schema.sql`
+
+### 2) Render (API)
+1. Create a new **Web Service** from the `api` folder.
+2. Build command: `npm install`
+3. Start command: `npm run start`
+4. Set env vars:
+   - `DATABASE_URL` = Neon connection string
+   - `JWT_SECRET` = random secret
+   - `STORAGE_DIR` = `/tmp/storage`
+   - `CORS_ORIGIN` = your Vercel domain (e.g., `https://your-app.vercel.app`)
+
+### 3) Vercel (Web)
+1. Import the `web` folder as a Vercel project.
+2. Set env:
+   - `NEXT_PUBLIC_API_URL` = Render API URL (e.g., `https://your-api.onrender.com`)
+3. Deploy.
+
+### Notes
+- After deploying, verify `/health` on the API URL.
+- Update `CORS_ORIGIN` if you add custom domains.
 
 ## Anomaly Rules (Heuristic)
 - Burst requests from a single IP within 3 seconds.
