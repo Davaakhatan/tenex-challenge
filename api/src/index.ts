@@ -9,8 +9,19 @@ import fs from "node:fs/promises";
 const app = express();
 const storageDir = process.env.STORAGE_DIR ?? "./storage";
 
+const rawOrigins = process.env.CORS_ORIGIN ?? "*";
+const allowAll = rawOrigins === "*";
+const allowList = rawOrigins
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ?? "*",
+  origin: (origin: string | undefined, callback: (err: Error | null, ok?: boolean) => void) => {
+    if (allowAll) return callback(null, true);
+    if (!origin) return callback(null, true);
+    return callback(null, allowList.includes(origin));
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 };

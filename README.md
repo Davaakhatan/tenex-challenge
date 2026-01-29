@@ -28,7 +28,7 @@ Login returns a JWT; send it as `Authorization: Bearer <token>` for uploads and 
 - `GET /analysis/:uploadId/summary` -> summary only
 
 ## Env
-- API: `DATABASE_URL`, `JWT_SECRET`, `STORAGE_DIR`, `CORS_ORIGIN`
+- API: `DATABASE_URL`, `JWT_SECRET`, `STORAGE_DIR`, `CORS_ORIGIN` (comma-separated allowed origins or `*`)
 - Web: `NEXT_PUBLIC_API_URL`
 
 ## Example Logs
