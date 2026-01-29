@@ -13,10 +13,19 @@ router.use(requireAuth);
 
 const storageDir = process.env.STORAGE_DIR ?? "./storage";
 const upload = multer({ dest: storageDir });
+const maxSizeBytes = 5 * 1024 * 1024;
+const allowedExt = new Set([".log", ".txt"]);
 
 router.post("/", upload.single("file"), async (req, res) => {
   const file = req.file;
   if (!file) return res.status(400).json({ error: "Missing file" });
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (!allowedExt.has(ext)) {
+    return res.status(400).json({ error: "Invalid file type. Use .log or .txt" });
+  }
+  if (file.size > maxSizeBytes) {
+    return res.status(400).json({ error: "File too large (max 5MB)" });
+  }
 
   const fullPath = path.resolve(file.path);
   let content = "";

@@ -5,10 +5,12 @@ import { useState } from "react";
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return;
+    setError(null);
     const form = new FormData();
     form.append("file", file);
     const token = localStorage.getItem("token");
@@ -18,7 +20,8 @@ export default function UploadPage() {
       body: form
     });
     if (!res.ok) {
-      alert("Upload failed");
+      const body = await res.json().catch(() => null);
+      setError(body?.error ?? "Upload failed");
       return;
     }
     const data = await res.json();
@@ -37,6 +40,11 @@ export default function UploadPage() {
         />
         <button className="button" type="submit">Analyze</button>
       </form>
+      {error && (
+        <p className="badge" style={{ background: "var(--danger)", color: "#0f141b" }}>
+          {error}
+        </p>
+      )}
 
       {result && (
         <div style={{ marginTop: 16 }}>
