@@ -7,6 +7,7 @@ import { detectAnomalies } from "../services/anomaly";
 import { withTransaction } from "../db";
 import { buildTimeline } from "../services/timeline";
 import { requireAuth } from "../middleware/auth";
+import { buildSummary } from "../services/summary";
 
 const router = Router();
 router.use(requireAuth);
@@ -38,6 +39,7 @@ router.post("/", upload.single("file"), async (req, res) => {
   const { events, summary } = parseLogWithStats(content);
   const anomalies = detectAnomalies(events);
   const timeline = buildTimeline(events);
+  const stats = buildSummary(events);
   const warnings = summary.invalidLines > 0 ? ["Some lines failed to parse"] : [];
 
   const uploadId = await withTransaction(async (client) => {
@@ -79,7 +81,8 @@ router.post("/", upload.single("file"), async (req, res) => {
     warnings,
     events,
     anomalies,
-    timeline
+    timeline,
+    stats
   });
 });
 

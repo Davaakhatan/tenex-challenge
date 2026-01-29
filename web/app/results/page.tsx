@@ -42,6 +42,18 @@ export default function ResultsPage() {
               <p>No anomalies detected.</p>
             )}
           </div>
+          {data.stats && (
+            <div>
+              <h3>Summary</h3>
+              <p className="badge">Error rate: {(data.stats.errorRate * 100).toFixed(1)}%</p>
+              <p className="badge">
+                Top IPs: {data.stats.topSrcIps.map((ip: any) => `${ip.ip} (${ip.count})`).join(", ")}
+              </p>
+              <p className="badge">
+                Top paths: {data.stats.topPaths.map((p: any) => `${p.path} (${p.count})`).join(", ")}
+              </p>
+            </div>
+          )}
           <div>
             <h3>Events (sample)</h3>
             {data.events?.length ? (
