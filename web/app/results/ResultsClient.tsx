@@ -118,23 +118,6 @@ export default function ResultsClient() {
         {uploadId && !data && <p className="subtle">Loading analysis...</p>}
         {data && (
           <div className="grid" style={{ marginTop: 12 }}>
-            <div className="grid grid-2">
-              <span className="badge">Events: {data.events?.length ?? 0}</span>
-              <span className="badge">Anomalies: {data.anomalies?.length ?? 0}</span>
-              {data.stats && (
-                <span className="badge">Error rate: {(data.stats.errorRate * 100).toFixed(1)}%</span>
-              )}
-            </div>
-            {data.stats && (
-              <div className="grid grid-2">
-                <span className="pill">
-                  Top IPs: {data.stats.topSrcIps.map((ip: any) => `${ip.ip} (${ip.count})`).join(", ")}
-                </span>
-                <span className="pill">
-                  Top paths: {data.stats.topPaths.map((p: any) => `${p.path} (${p.count})`).join(", ")}
-                </span>
-              </div>
-            )}
             <div className="card">
               <h3 className="card-title">SOC learnings</h3>
               <div className="grid">
