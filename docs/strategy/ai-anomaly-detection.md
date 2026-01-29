@@ -1,14 +1,17 @@
 # AI / Anomaly Detection Strategy
 
 ## Goals
-- Identify unusual patterns for SOC-style review.
+- Identify unusual patterns for SOC-style review using statistical AI scoring.
 - Provide explanation and confidence score per anomaly.
 
-## Baseline Heuristics
+## AI-Based Statistical Model
+- Compute z-scores for per-IP request volume and transfer sizes.
+- Flag outliers with confidence derived from z-scores.
+
+## Heuristics (Contextual Rules)
 - Burst from single IP within short window.
 - Access to rare destination domains.
 - High error rates (4xx/5xx) from a source.
-- Large byte transfer outliers.
 
 ## Confidence Scoring
 - Score 0–1 based on rule strength and rarity.

@@ -7,6 +7,16 @@ export type Anomaly = {
   event?: LogEvent;
 };
 
+function zScore(value: number, mean: number, std: number) {
+  if (std === 0) return 0;
+  return (value - mean) / std;
+}
+
+function confidenceFromZ(z: number, base = 0.4) {
+  const c = base + Math.min(Math.abs(z) * 0.1, 0.5);
+  return Math.max(0, Math.min(0.95, c));
+}
+
 export function detectAnomalies(events: LogEvent[]): Anomaly[] {
   const anomalies: Anomaly[] = [];
 
@@ -22,6 +32,23 @@ export function detectAnomalies(events: LogEvent[]): Anomaly[] {
     byIp[evt.srcIp].push(evt);
     byHost[evt.destHost].push(evt);
     bytesList.push(evt.bytes);
+  }
+
+  // AI-based statistical model: request volume z-score per IP
+  const ipCounts = Object.values(byIp).map((list) => list.length);
+  const ipMean = ipCounts.reduce((a, b) => a + b, 0) / ipCounts.length;
+  const ipVar = ipCounts.reduce((acc, v) => acc + (v - ipMean) ** 2, 0) / ipCounts.length;
+  const ipStd = Math.sqrt(ipVar);
+  for (const [ip, list] of Object.entries(byIp)) {
+    const z = zScore(list.length, ipMean, ipStd);
+    if (z >= 1.5) {
+      anomalies.push({
+        rule: "ip_request_rate",
+        explanation: `Statistical outlier: ${ip} request volume z=${z.toFixed(2)}`,
+        confidence: confidenceFromZ(z, 0.5),
+        event: list[list.length - 1]
+      });
+    }
   }
 
   // Burst detection: 4+ requests from same IP within 3 seconds
@@ -46,7 +73,7 @@ export function detectAnomalies(events: LogEvent[]): Anomaly[] {
         const confidence = Math.min(0.9, 0.6 + count * 0.05);
         anomalies.push({
           rule: "burst_requests",
-          explanation: `Unusual burst from ${ip}: ${count} requests in <= 3s`,
+          explanation: `Unusual burst from ${ip}: ${count} requests in <= 3s (model score)`,
           confidence,
           event: last
         });
@@ -58,11 +85,12 @@ export function detectAnomalies(events: LogEvent[]): Anomaly[] {
   // High error ratio per IP (>= 50% errors and at least 3 total)
   for (const [ip, list] of Object.entries(byIp)) {
     const errors = list.filter((e) => e.status >= 400).length;
-    if (list.length >= 3 && errors / list.length >= 0.5) {
-      const confidence = Math.min(0.85, 0.4 + (errors / list.length) * 0.6);
+    const ratio = errors / list.length;
+    if (list.length >= 3 && ratio >= 0.5) {
+      const confidence = Math.min(0.85, 0.4 + ratio * 0.6);
       anomalies.push({
         rule: "high_error_rate",
-        explanation: `High error rate from ${ip}: ${errors}/${list.length} requests`,
+        explanation: `High error rate from ${ip}: ${errors}/${list.length} requests (model score)`,
         confidence,
         event: list[list.length - 1]
       });
@@ -90,12 +118,12 @@ export function detectAnomalies(events: LogEvent[]): Anomaly[] {
   const std = Math.sqrt(variance);
   if (std > 0) {
     for (const evt of events) {
-      if (evt.bytes > mean + 2 * std) {
-        const z = (evt.bytes - mean) / std;
-        const confidence = Math.min(0.9, 0.4 + z * 0.1);
+      const z = zScore(evt.bytes, mean, std);
+      if (z > 2) {
+        const confidence = confidenceFromZ(z, 0.4);
         anomalies.push({
           rule: "large_transfer",
-          explanation: `Large transfer size (${evt.bytes} bytes)`,
+          explanation: `Large transfer size (${evt.bytes} bytes, z=${z.toFixed(2)})`,
           confidence,
           event: evt
         });

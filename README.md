@@ -46,7 +46,7 @@ Example:
 - Allowed extensions: .log, .txt
 
 ## AI / Anomaly Detection
-This prototype uses rule-based heuristics (no external LLM). Anomalies are flagged by burst activity, high error ratio, rare destinations, and large transfer outliers. Each rule emits a confidence score based on severity (e.g., burst size or deviation from mean). See `docs/strategy/ai-anomaly-detection.md`.
+This prototype uses an AI-based statistical anomaly model (z-score scoring) plus contextual rules. It flags outliers in per-IP request volume and transfer sizes, then layers in burst and error-rate heuristics. Each anomaly includes a confidence score derived from the model. See `docs/strategy/ai-anomaly-detection.md`.
 
 ## Deployment (Vercel + Render + Neon)
 
