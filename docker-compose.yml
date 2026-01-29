@@ -23,6 +23,7 @@ services:
     volumes:
       - ./api:/app
       - ./api/storage:/app/storage
+      - /app/node_modules
     depends_on:
       - db
 
@@ -34,6 +35,8 @@ services:
       - "3000:3000"
     volumes:
       - ./web:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - api
 

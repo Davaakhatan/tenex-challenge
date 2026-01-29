@@ -6,7 +6,10 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-export async function query<T>(text: string, params: Array<unknown> = []) {
+export async function query<T extends pg.QueryResultRow>(
+  text: string,
+  params: Array<unknown> = []
+) {
   const result = await pool.query<T>(text, params);
   return result;
 }
