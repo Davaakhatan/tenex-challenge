@@ -23,6 +23,13 @@ Login returns a JWT; send it as `Authorization: Bearer <token>` for uploads and 
 ## Example Logs
 See `examples/`.
 
+## Log Format
+Each line must follow:
+`ISO_TIMESTAMP SRC_IP METHOD HOST PATH STATUS BYTES`
+
+Example:
+`2026-01-29T10:00:00Z 10.0.0.1 GET example.com /login 200 512`
+
 ## AI Usage
 Documented in `docs/strategy/ai-anomaly-detection.md`.
 # tenex-challenge

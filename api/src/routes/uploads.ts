@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { parseLog } from "../services/parser";
+import { parseLogWithStats } from "../services/parser";
 import { detectAnomalies } from "../services/anomaly";
 import { withTransaction } from "../db";
 import { buildTimeline } from "../services/timeline";
@@ -20,14 +20,14 @@ router.post("/", upload.single("file"), async (req, res) => {
 
   const fullPath = path.resolve(file.path);
   const content = await fs.readFile(fullPath, "utf-8");
-  const events = parseLog(content);
+  const { events, summary } = parseLogWithStats(content);
   const anomalies = detectAnomalies(events);
   const timeline = buildTimeline(events);
 
   const uploadId = await withTransaction(async (client) => {
     const uploadResult = await client.query<{ id: string }>(
-      "INSERT INTO uploads (filename, storage_path, size_bytes) VALUES ($1, $2, $3) RETURNING id",
-      [file.originalname, fullPath, file.size]
+      "INSERT INTO uploads (filename, storage_path, size_bytes, status) VALUES ($1, $2, $3, $4) RETURNING id",
+      [file.originalname, fullPath, file.size, summary.parsedLines > 0 ? \"parsed\" : \"failed\"]
     );
     const id = uploadResult.rows[0]?.id;
     if (!id) throw new Error("Upload insert failed");
@@ -59,6 +59,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       storagePath: fullPath,
       size: file.size
     },
+    summary,
     events,
     anomalies,
     timeline

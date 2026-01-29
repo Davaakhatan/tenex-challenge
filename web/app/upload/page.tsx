@@ -46,6 +46,11 @@ export default function UploadPage() {
           {result.timeline?.length ? (
             <p className="badge">Timeline buckets: {result.timeline.length}</p>
           ) : null}
+          {result.summary && (
+            <p className="badge">
+              Parsed {result.summary.parsedLines} / {result.summary.totalLines} lines
+            </p>
+          )}
           {result.upload?.id && (
             <p>
               View full results: <a href={`/results?uploadId=${result.upload.id}`}>Open</a>
