@@ -19,15 +19,22 @@ router.post("/", upload.single("file"), async (req, res) => {
   if (!file) return res.status(400).json({ error: "Missing file" });
 
   const fullPath = path.resolve(file.path);
-  const content = await fs.readFile(fullPath, "utf-8");
+  let content = "";
+  try {
+    content = await fs.readFile(fullPath, "utf-8");
+  } catch {
+    return res.status(500).json({ error: "Failed to read uploaded file" });
+  }
+
   const { events, summary } = parseLogWithStats(content);
   const anomalies = detectAnomalies(events);
   const timeline = buildTimeline(events);
+  const warnings = summary.invalidLines > 0 ? ["Some lines failed to parse"] : [];
 
   const uploadId = await withTransaction(async (client) => {
     const uploadResult = await client.query<{ id: string }>(
       "INSERT INTO uploads (filename, storage_path, size_bytes, status) VALUES ($1, $2, $3, $4) RETURNING id",
-      [file.originalname, fullPath, file.size, summary.parsedLines > 0 ? \"parsed\" : \"failed\"]
+      [file.originalname, fullPath, file.size, summary.parsedLines > 0 ? "parsed" : "failed"]
     );
     const id = uploadResult.rows[0]?.id;
     if (!id) throw new Error("Upload insert failed");
@@ -60,6 +67,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       size: file.size
     },
     summary,
+    warnings,
     events,
     anomalies,
     timeline

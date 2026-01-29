@@ -13,6 +13,7 @@ export type ParseSummary = {
   totalLines: number;
   parsedLines: number;
   invalidLines: number;
+  invalidSamples: string[];
 };
 
 const linePattern =
@@ -50,16 +51,21 @@ export function parseLogWithStats(content: string): { events: LogEvent[]; summar
   const lines = content.split(/\r?\n/);
   const events: LogEvent[] = [];
   let invalidLines = 0;
+  const invalidSamples: string[] = [];
   for (const line of lines) {
     if (!line.trim()) continue;
     const evt = parseLine(line);
     if (evt) events.push(evt);
-    else invalidLines += 1;
+    else {
+      invalidLines += 1;
+      if (invalidSamples.length < 5) invalidSamples.push(line);
+    }
   }
   const summary: ParseSummary = {
     totalLines: lines.filter((line) => line.trim()).length,
     parsedLines: events.length,
-    invalidLines
+    invalidLines,
+    invalidSamples
   };
   return { events, summary };
 }

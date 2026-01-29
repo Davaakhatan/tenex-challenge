@@ -51,6 +51,16 @@ export default function UploadPage() {
               Parsed {result.summary.parsedLines} / {result.summary.totalLines} lines
             </p>
           )}
+          {result.warnings?.length ? (
+            <div>
+              <p className="badge">Warnings: {result.warnings.join(", ")}</p>
+              {result.summary?.invalidSamples?.length ? (
+                <pre style={{ whiteSpace: "pre-wrap" }}>
+                  {result.summary.invalidSamples.join("\n")}
+                </pre>
+              ) : null}
+            </div>
+          ) : null}
           {result.upload?.id && (
             <p>
               View full results: <a href={`/results?uploadId=${result.upload.id}`}>Open</a>
