@@ -1,0 +1,6 @@
+datetime,src_ip,user,url,action,status,bytes
+2026-01-29T10:00:00Z,10.0.0.1,user1,http://example.com/login,Allowed,200,512
+2026-01-29T10:00:01Z,10.0.0.1,user1,http://example.com/login,Allowed,200,512
+2026-01-29T10:00:02Z,10.0.0.1,user1,http://example.com/admin,Blocked,403,128
+2026-01-29T10:00:03Z,10.0.0.2,user2,http://example.com/login,Blocked,401,256
+2026-01-29T10:00:04Z,10.0.0.3,user3,http://example.com/report,Allowed,200,4096

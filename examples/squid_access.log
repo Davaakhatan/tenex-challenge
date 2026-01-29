@@ -1,0 +1,4 @@
+1456795324.123  200 10.0.0.1 TCP_MISS/200 512 GET http://example.com/login - DIRECT/93.184.216.34 text/html
+1456795325.321  180 10.0.0.1 TCP_MISS/200 512 GET http://example.com/login - DIRECT/93.184.216.34 text/html
+1456795326.555  220 10.0.0.2 TCP_MISS/401 256 POST http://example.com/login - DIRECT/93.184.216.34 text/html
+1456795327.777  210 10.0.0.3 TCP_MISS/200 4096 GET http://example.com/report - DIRECT/93.184.216.34 text/html

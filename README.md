@@ -41,6 +41,12 @@ Each line must follow:
 Example:
 `2026-01-29T10:00:00Z 10.0.0.1 GET example.com /login 200 512`
 
+## Supported Formats
+- Custom format above
+- Apache access logs
+- Squid proxy access logs
+- Zscaler-like CSV logs
+
 ## Upload Limits
 - Max file size: 5MB
 - Allowed extensions: .log, .txt
