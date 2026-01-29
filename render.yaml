@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: tenex-api
+    env: node
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: STORAGE_DIR
+        value: /tmp/storage
+      - key: CORS_ORIGIN
+        sync: false
