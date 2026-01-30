@@ -39,9 +39,23 @@ router.get("/", async (_req, res) => {
 
 router.delete("/:uploadId", async (req, res) => {
   const { uploadId } = req.params;
-  await withTransaction(async (client) => {
+  const storagePath = await withTransaction(async (client) => {
+    const found = await client.query<{ storage_path: string }>(
+      "SELECT storage_path FROM uploads WHERE id = $1",
+      [uploadId]
+    );
     await client.query("DELETE FROM uploads WHERE id = $1", [uploadId]);
+    return found.rows[0]?.storage_path ?? null;
   });
+
+  if (storagePath) {
+    try {
+      await fs.unlink(storagePath);
+    } catch {
+      // best-effort cleanup
+    }
+  }
+
   return res.json({ ok: true });
 });
 

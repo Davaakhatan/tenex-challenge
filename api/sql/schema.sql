@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS events (
   raw text NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS events_upload_id_idx ON events(upload_id);
+
 CREATE TABLE IF NOT EXISTS anomalies (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   upload_id uuid NOT NULL REFERENCES uploads(id) ON DELETE CASCADE,
@@ -39,3 +41,5 @@ CREATE TABLE IF NOT EXISTS anomalies (
   confidence numeric NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+CREATE INDEX IF NOT EXISTS anomalies_upload_id_idx ON anomalies(upload_id);
