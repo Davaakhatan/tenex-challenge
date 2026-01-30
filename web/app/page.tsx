@@ -24,12 +24,15 @@ export default function HomePage() {
   async function onDeleteRecent(id: string) {
     const token = localStorage.getItem("token");
     if (!token) return;
-    const ok = window.confirm("Delete this upload and its results?");
-    if (!ok) return;
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      alert(body?.error ?? "Delete failed");
+      return;
+    }
     setRecent((prev) => prev.filter((u) => u.id !== id));
     const last = localStorage.getItem("lastUploadId");
     if (last === id) {

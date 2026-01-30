@@ -10,6 +10,7 @@ export default function ResultsClient() {
   const [data, setData] = useState<any>(null);
   const [uploads, setUploads] = useState<any[]>([]);
   const [lastUploadId, setLastUploadId] = useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -48,16 +49,29 @@ export default function ResultsClient() {
   async function onDeleteUpload(id: string) {
     const token = localStorage.getItem("token");
     if (!token) return;
-    const ok = window.confirm("Delete this upload and its results?");
-    if (!ok) return;
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setUploads((prev) => prev.filter((u) => u.id !== id));
-    if (lastUploadId === id) {
-      localStorage.removeItem("lastUploadId");
-      setLastUploadId(null);
+    if (deletingIds.has(id)) return;
+    setDeletingIds((prev) => new Set(prev).add(id));
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        alert(body?.error ?? "Delete failed");
+        return;
+      }
+      setUploads((prev) => prev.filter((u) => u.id !== id));
+      if (lastUploadId === id) {
+        localStorage.removeItem("lastUploadId");
+        setLastUploadId(null);
+      }
+    } finally {
+      setDeletingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   }
 
@@ -102,8 +116,13 @@ export default function ResultsClient() {
                       <td>{u.anomalies_count}</td>
                       <td>{new Date(u.created_at).toLocaleString()}</td>
                       <td>
-                        <button className="pill action-button" type="button" onClick={() => onDeleteUpload(u.id)}>
-                          Delete
+                        <button
+                          className="pill action-button"
+                          type="button"
+                          onClick={() => onDeleteUpload(u.id)}
+                          disabled={deletingIds.has(u.id)}
+                        >
+                          {deletingIds.has(u.id) ? "Deleting..." : "Delete"}
                         </button>
                       </td>
                     </tr>
