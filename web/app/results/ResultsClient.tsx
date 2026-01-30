@@ -102,7 +102,7 @@ export default function ResultsClient() {
                       <td>{u.anomalies_count}</td>
                       <td>{new Date(u.created_at).toLocaleString()}</td>
                       <td>
-                        <button className="pill" type="button" onClick={() => onDeleteUpload(u.id)}>
+                        <button className="pill action-button" type="button" onClick={() => onDeleteUpload(u.id)}>
                           Delete
                         </button>
                       </td>

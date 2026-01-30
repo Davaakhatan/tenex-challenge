@@ -9,6 +9,7 @@ export default function UploadPage() {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,25 +22,30 @@ export default function UploadPage() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!file) return;
+    if (!file || isSubmitting) return;
+    setIsSubmitting(true);
     setError(null);
     const form = new FormData();
     form.append("file", file);
     const token = localStorage.getItem("token");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
-      method: "POST",
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      body: form
-    });
-    if (!res.ok) {
-      const body = await res.json().catch(() => null);
-      setError(body?.error ?? "Upload failed");
-      return;
-    }
-    const data = await res.json();
-    setResult(data);
-    if (data?.upload?.id) {
-      localStorage.setItem("lastUploadId", data.upload.id);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        body: form
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setError(body?.error ?? "Upload failed");
+        return;
+      }
+      const data = await res.json();
+      setResult(data);
+      if (data?.upload?.id) {
+        localStorage.setItem("lastUploadId", data.upload.id);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -58,9 +64,17 @@ export default function UploadPage() {
             type="file"
             accept=".log,.txt"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            disabled={isSubmitting}
           />
-          <button className="button" type="submit" disabled={!file}>Analyze</button>
+          <button className="button" type="submit" disabled={!file || isSubmitting}>
+            {isSubmitting ? "Analyzing..." : "Analyze"}
+          </button>
         </form>
+        {isSubmitting && (
+          <p className="subtle" style={{ marginTop: 8 }}>
+            Large files can take a minute. Please wait…
+          </p>
+        )}
         {error && (
           <p className="badge" style={{ background: "#fee2e2", color: "#991b1b" }}>
             {error}

@@ -189,6 +189,10 @@ main {
   font-size: 13px;
 }
 
+.action-button {
+  cursor: pointer;
+}
+
 .anomaly {
   border-left: 3px solid var(--danger);
   padding-left: 12px;

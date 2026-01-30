@@ -110,7 +110,7 @@ export default function HomePage() {
                     <td>{u.anomalies_count}</td>
                     <td>{new Date(u.created_at).toLocaleString()}</td>
                     <td>
-                      <button className="pill" type="button" onClick={() => onDeleteRecent(u.id)}>
+                      <button className="pill action-button" type="button" onClick={() => onDeleteRecent(u.id)}>
                         Delete
                       </button>
                     </td>
