@@ -25,6 +25,8 @@ export default function HomePage() {
   async function onDeleteRecent(id: string) {
     const token = localStorage.getItem("token");
     if (!token) return;
+    const ok = window.confirm("Delete this upload and all related results?");
+    if (!ok) return;
     const res = await fetch(`${API_URL}/uploads/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }

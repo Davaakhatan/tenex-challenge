@@ -51,6 +51,8 @@ export default function ResultsClient() {
     const token = localStorage.getItem("token");
     if (!token) return;
     if (deletingIds.has(id)) return;
+    const ok = window.confirm("Delete this upload and all related results?");
+    if (!ok) return;
     setDeletingIds((prev) => new Set(prev).add(id));
     try {
       const controller = new AbortController();
