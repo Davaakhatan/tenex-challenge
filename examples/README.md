@@ -22,3 +22,14 @@ Large samples (~3–4MB each, under 5MB limit):
 - `big_custom.log`
 - `big_apache.log`
 - `big_json.log`
+
+Varied large samples (multi-format, mixed IPs/paths/status/anomalies):
+- `big_custom_varied.log`
+- `big_apache_varied.log`
+- `big_nginx_varied.log`
+- `big_squid_varied.log`
+- `big_zscaler_csv_varied.csv`
+- `big_zscaler_json_varied.json`
+- `big_app_json_varied.log`
+- `big_syslog_varied.log`
+- `big_kv_varied.log`

@@ -58,12 +58,12 @@ export default function UploadPage() {
     <div className="grid">
       <div className="card">
         <h2 className="card-title">Upload logs</h2>
-        <p className="subtle">Accepted: .log or .txt, up to 5MB.</p>
+        <p className="subtle">Accepted: .log, .txt, .csv, .json (or .jsonl), up to 5MB.</p>
         <form onSubmit={onSubmit} className="grid" style={{ marginTop: 12 }}>
           <input
             className="input"
             type="file"
-            accept=".log,.txt"
+            accept=".log,.txt,.csv,.json,.jsonl,.ndjson"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             disabled={isSubmitting}
           />
