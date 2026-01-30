@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
   const [authed, setAuthed] = useState(false);
   const [recent, setRecent] = useState<any[]>([]);
 
@@ -13,7 +14,7 @@ export default function HomePage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+    fetch(`${API_URL}/uploads`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
@@ -24,7 +25,7 @@ export default function HomePage() {
   async function onDeleteRecent(id: string) {
     const token = localStorage.getItem("token");
     if (!token) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+    const res = await fetch(`${API_URL}/uploads/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
     });

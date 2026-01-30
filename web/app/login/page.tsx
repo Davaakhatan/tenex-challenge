@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
   const router = useRouter();
   const [email, setEmail] = useState("demo@tenex.local");
   const [password, setPassword] = useState("password");
@@ -12,7 +13,7 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })

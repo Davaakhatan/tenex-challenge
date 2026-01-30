@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ResultsClient() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
   const searchParams = useSearchParams();
   const router = useRouter();
   const uploadId = searchParams.get("uploadId");
@@ -25,7 +26,7 @@ export default function ResultsClient() {
   useEffect(() => {
     if (!uploadId) return;
     const token = localStorage.getItem("token");
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/analysis/${uploadId}`, {
+    fetch(`${API_URL}/analysis/${uploadId}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined
     })
       .then((res) => res.json())
@@ -38,7 +39,7 @@ export default function ResultsClient() {
     const token = localStorage.getItem("token");
     const last = localStorage.getItem("lastUploadId");
     setLastUploadId(last);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+    fetch(`${API_URL}/uploads`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined
     })
       .then((res) => res.json())
@@ -52,10 +53,14 @@ export default function ResultsClient() {
     if (deletingIds.has(id)) return;
     setDeletingIds((prev) => new Set(prev).add(id));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`, {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch(`${API_URL}/uploads/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal
       });
+      clearTimeout(timeout);
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         alert(body?.error ?? "Delete failed");

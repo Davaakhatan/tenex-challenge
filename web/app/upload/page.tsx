@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function UploadPage() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<any>(null);
@@ -29,7 +30,7 @@ export default function UploadPage() {
     form.append("file", file);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads`, {
+      const res = await fetch(`${API_URL}/uploads`, {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: form
