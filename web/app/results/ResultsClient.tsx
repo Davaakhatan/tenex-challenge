@@ -49,7 +49,10 @@ export default function ResultsClient() {
 
   async function onDeleteUpload(id: string) {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      alert("Please log in again to delete uploads.");
+      return;
+    }
     if (deletingIds.has(id)) return;
     const ok = window.confirm("Delete this upload and all related results?");
     if (!ok) return;
@@ -73,6 +76,8 @@ export default function ResultsClient() {
         localStorage.removeItem("lastUploadId");
         setLastUploadId(null);
       }
+    } catch (err) {
+      alert("Network error deleting upload. Check API URL and try again.");
     } finally {
       setDeletingIds((prev) => {
         const next = new Set(prev);

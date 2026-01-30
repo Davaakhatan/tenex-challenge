@@ -24,22 +24,29 @@ export default function HomePage() {
 
   async function onDeleteRecent(id: string) {
     const token = localStorage.getItem("token");
-    if (!token) return;
-    const ok = window.confirm("Delete this upload and all related results?");
-    if (!ok) return;
-    const res = await fetch(`${API_URL}/uploads/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) {
-      const body = await res.json().catch(() => null);
-      alert(body?.error ?? "Delete failed");
+    if (!token) {
+      alert("Please log in again to delete uploads.");
       return;
     }
-    setRecent((prev) => prev.filter((u) => u.id !== id));
-    const last = localStorage.getItem("lastUploadId");
-    if (last === id) {
-      localStorage.removeItem("lastUploadId");
+    const ok = window.confirm("Delete this upload and all related results?");
+    if (!ok) return;
+    try {
+      const res = await fetch(`${API_URL}/uploads/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        alert(body?.error ?? "Delete failed");
+        return;
+      }
+      setRecent((prev) => prev.filter((u) => u.id !== id));
+      const last = localStorage.getItem("lastUploadId");
+      if (last === id) {
+        localStorage.removeItem("lastUploadId");
+      }
+    } catch {
+      alert("Network error deleting upload. Check API URL and try again.");
     }
   }
 
